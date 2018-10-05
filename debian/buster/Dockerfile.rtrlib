@@ -1,0 +1,19 @@
+FROM frr_debian:buster
+
+RUN apt-get install -y cmake libssh-dev doxygen
+
+USER frrbuild
+WORKDIR /home/frrbuild
+RUN git clone https://github.com/rtrlib/rtrlib.git
+WORKDIR /home/frrbuild/rtrlib
+RUN git checkout -b build v0.5.0
+RUN sed -e '1i /usr/lib/*/pkgconfig/rtrlib.pc' -i debian/librtr-dev.install
+RUN dpkg-buildpackage -F
+
+WORKDIR /home/frrbuild
+USER root
+RUN dpkg -i librtr0_0.5.0-1_amd64.deb
+RUN dpkg -i librtr-dev_0.5.0-1_amd64.deb
+
+WORKDIR /
+# ADD package.sh.rtrlib /root/package.sh

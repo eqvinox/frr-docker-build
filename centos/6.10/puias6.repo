@@ -1,0 +1,10 @@
+### Name: RPM Repository for RHEL 6 - PUIAS (used for Sphinx-Build)
+### URL: http://springdale.math.ias.edu/data/puias/computational
+[puias-computational]
+name = RPM Repository for RHEL 6 - Sphinx-Build
+baseurl = http://springdale.math.ias.edu/data/puias/computational/$releasever/$basearch
+#mirrorlist =
+enabled = 1
+protect = 0
+gpgkey =
+gpgcheck = 0
