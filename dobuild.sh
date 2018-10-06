@@ -4,7 +4,9 @@ set -e -x
 if [ "`id -u`" = "0" ]; then
 	cd /build
 	chown -R frrbuild: . /root
-	exec su frrbuild /build/dobuild.sh "$@"
+	# do NOT make this an "exec", su can't be pid 1
+	su frrbuild /build/dobuild.sh "$@"
+	exit $?
 fi
 
 export PATH="/build:$PATH"
