@@ -4,9 +4,13 @@ tar zxvf frr-dist.tar.gz
 cd frr-dist
 ln -s debianpkg debian
 
-sed -e 's%WANT_RPKI ?= 0%WANT_RPKI = 1%' -i debian/rules
+if test -f /usr/lib/*/pkgconfig/rtrlib.pc; then
+	sed -e 's%WANT_RPKI ?= 0%WANT_RPKI = 1%' -i debian/rules
+	profile="-P pkg.frr.rtrlib"
+fi
+
 sed -e 's%WANT_SNMP ?= 0%WANT_SNMP = 1%' -i debian/rules
 
-dpkg-buildpackage -b
+dpkg-buildpackage -b $profile
 cd ..
 mv *.deb *.buildinfo *.changes output/

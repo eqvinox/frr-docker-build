@@ -1,14 +1,14 @@
 #!/bin/sh
 
 set -e -x
-export PATH="/build:$PATH"
-[ -f /root/build.env ] && . /root/build.env
-
 if [ "`id -u`" = "0" ]; then
 	cd /build
 	chown -R frrbuild: . /root
 	exec su frrbuild /build/dobuild.sh "$@"
 fi
+
+export PATH="/build:$PATH"
+[ -f /root/build.env ] && . /root/build.env
 
 target="$1"
 
@@ -54,10 +54,12 @@ build() {
 	$tsrun tar zxf frr-dist.tar.gz
 	mkdir frr-build
 	cd frr-build
-	$tsrun ../frr-dist/configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	$tsrun ../frr-dist/configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var $FRR_CONFIGURE_ARGS
 	$tsrun make -j16
-	$tsrun make -j16 check
+	[ -d hosttools ] || $tsrun make -j16 check
 	$tsrun make DESTDIR=/build/frr-install install
+	cd /build/frr-install
+	tar zcvpf /build/output/frr-fs.tar.gz --transform='s%^./%/%' .
 }
 
 package() {
@@ -71,6 +73,10 @@ package() {
 		/bin/bash --login
 		build
 	fi
+}
+
+shell() {
+	/bin/bash
 }
 
 $target
