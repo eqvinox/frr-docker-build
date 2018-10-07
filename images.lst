@@ -1,0 +1,23 @@
+#
+# list of (source) images that mkimages.sh will build
+#
+
+debian/jessie
+debian/stretch
+debian/buster
+
+# (old i386 images are disabled by default to save space)
+#
+# i386/debian/jessie
+# i386/debian/stretch
+i386/debian/buster
+
+openwrt/18.06.1
+
+alpine/3.8
+
+opensuse-leap/15
+
+centos/6.10
+
+fedora/28

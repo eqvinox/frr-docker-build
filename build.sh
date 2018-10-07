@@ -64,6 +64,7 @@ done
 
 onexit() {
 	rv="$?"
+	cd "$dir"
 	echo ""
 	echo ""
 	if test "$rv" -ne 0; then
@@ -73,7 +74,7 @@ onexit() {
 		echo ""
 	fi
 	echo "$dir/output"
-	find "$dir/output" -ls
+	find "$dir/output" -type f -exec /bin/sh -c 'printf '%s...' `sha256sum "{}" | cut -c 1-32`' \; -printf '  %M  %-10u %-10g  %9s  %p\n'
 	echo ""
 	echo "use   rm -rf \"$dir\"   to clean up"
 	exit "$rv"
@@ -102,7 +103,7 @@ cp "$selfdir/dobuild.sh" .
 if test -z "$tarball"; then
 	commit="`git -C \"$src\" rev-list --max-count=1 \"${commit:-HEAD}\"`"
 
-	echo building in $dir, src $src, commit $commit:
+	echo "building in $dir, src $src, commit $commit:"
 	git -C "$src" --no-pager log -n 1 --pretty=oneline "$commit"
 
 	git clone -n "$src" frr-source
@@ -110,6 +111,8 @@ if test -z "$tarball"; then
 	git fetch origin "$commit"
 	git checkout -b build "$commit"
 else
+	echo "building in $dir, tarball $tarball:"
+
 	cd "$base"
 	cp "$tarball" "$dir/frr-dist.tar.gz"
 	cd "$dir"

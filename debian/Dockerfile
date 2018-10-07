@@ -58,11 +58,11 @@ RUN cd rtrlib && \
 	dpkg-buildpackage -F
 
 FROM base
-COPY --from=rpkibuild /home/frrbuild/librtr0_0.5.0-1_amd64.deb /tmp
-COPY --from=rpkibuild /home/frrbuild/librtr-dev_0.5.0-1_amd64.deb /tmp
-RUN	dpkg -i /tmp/librtr0_0.5.0-1_amd64.deb && \
-	dpkg -i /tmp/librtr-dev_0.5.0-1_amd64.deb && \
-	rm /tmp/librtr0_0.5.0-1_amd64.deb /tmp/librtr-dev_0.5.0-1_amd64.deb
+COPY --from=rpkibuild /home/frrbuild/librtr0_0.5.0-1_*.deb /tmp
+COPY --from=rpkibuild /home/frrbuild/librtr-dev_0.5.0-1_*.deb /tmp
+RUN	dpkg -i /tmp/librtr0_0.5.0-1_*.deb && \
+	dpkg -i /tmp/librtr-dev_0.5.0-1_*.deb && \
+	rm /tmp/librtr0_0.5.0-1_*.deb /tmp/librtr-dev_0.5.0-1_*.deb
 
 ADD build.env /root/
 ADD package.sh /root/
