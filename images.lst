@@ -19,5 +19,6 @@ alpine/3.8
 opensuse-leap/15
 
 centos/6.10
+centos/7.5.1804
 
 fedora/28
