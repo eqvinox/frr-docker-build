@@ -7,15 +7,26 @@ cd frr-dist
 ln -s debianpkg debian
 
 VERSION="`dpkg-parsechangelog -S Version`"
-# suffix is used to have packages for different releases without name
-# collisions.  +pkgdeb is used instead of +deb to signal it's not an
-# official Debian thing.
-case "`cat /etc/debian_version`" in
-buster*|10|10.*)	SUFFIX="+pkgdeb10" ;;
-stretch*|9|9.*)		SUFFIX="+pkgdeb9" ;;
-jessie*|8|8.*)		SUFFIX="+pkgdeb8" ;;
-*)			SUFFIX="+unknown" ;;
-esac
+
+getsuffix() {
+	# suffix is used to have packages for different releases without name
+	# collisions.  +pkgdeb is used instead of +deb to signal it's not an
+	# official Debian thing.
+
+	local NAME VERSION ID ID_LIKE PRETTY_NAME VERSION_ID
+	. /etc/os-release
+
+	if test -z "$VERSION_ID"; then
+		dver="`cat /etc/debian_version`"
+		case "$dver" in
+		buster*)	VERSION_ID=10 ;;
+		*)		VERSION_ID=X ;;
+		esac
+	fi
+	SUFFIX="+`echo $ID | cut -c 1-3`$VERSION_ID"
+}
+
+getsuffix
 
 # TODO: need incremental snapshot numbers or something here
 sed -e "1 s%(.*)%($VERSION$SUFFIX)%" -i debian/changelog

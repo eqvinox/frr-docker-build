@@ -112,7 +112,7 @@ image() {
 		return $?
 	fi
 	if test -d "$osdir" -a -f "$osdir/Dockerfile"; then
-		do_build -t "$prefix$archimage" -f "$osdir/Dockerfile" "$osdir"
+		do_build -t "$prefix$archimage" "$osdir"
 		return $?
 	fi
 	if test "${image#i386/}" != "$image"; then

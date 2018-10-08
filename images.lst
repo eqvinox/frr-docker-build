@@ -12,6 +12,8 @@ debian/buster
 # i386/debian/stretch
 i386/debian/buster
 
+ubuntu/18.04
+
 openwrt/18.06.1
 
 alpine/3.8
