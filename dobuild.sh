@@ -72,7 +72,6 @@ package() {
 		$tsrun /root/package.sh
 	else
 		echo package: generic build
-		/bin/bash --login
 		build
 	fi
 }
